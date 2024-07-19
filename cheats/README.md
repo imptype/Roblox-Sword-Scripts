@@ -1,3 +1,3 @@
 # Cheats
 
-Cheats are only listed here for educative purposes and aren't recommended to use.
+Cheats are only listed here for educational purposes and aren't recommended to use.
