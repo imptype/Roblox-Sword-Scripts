@@ -1,6 +1,8 @@
 -- source https://scriptblox.com/script/Universal-Script-Sword-reach-script-5636
 -- alt source https://pastebin.com/raw/Jsghb8bt
--- updated at < july 20, 2022
+-- demo source https://www.youtube.com/watch?v=gh3PQ4bx16o
+-- demo alt source https://pastebin.com/wyXt5xmu
+-- updated at october 2, 2022
 
 local active = true
 local trueActive = true
