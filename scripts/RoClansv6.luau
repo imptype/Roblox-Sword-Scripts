@@ -1,5 +1,6 @@
 -- Entry point for the custom sword https://create.roblox.com/store/asset/4544019605/LinkedSword-RoClans
 -- Designed by Lametta but not widely used probably because it's too overwhelming, over 10,000 lines of code really...
+-- Updated at Apr 17, 2024
 
 --[[ ROCLANS V6 ]]--
 
