@@ -1,4 +1,5 @@
 -- source https://www.reddit.com/r/robloxhackers/comments/luxisl/comment/gpa2iyb/
+-- alt source https://pastebin.com/vxwM7D9Q
 -- updated at feb 28, 2021
 
 mt = getrawmetatable(game)
