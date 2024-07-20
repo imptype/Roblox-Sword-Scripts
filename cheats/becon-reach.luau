@@ -1,5 +1,5 @@
 -- source https://www.youtube.com/watch?v=p621V4noDwA
--- alt source https://pastebin.com/raw/s53URhpZ
+-- alt source https://pastebin.com/s53URhpZ
 -- debofuscated source (via ai) https://github.com/Mrbeconman9/s/blob/main/lua
 -- updated at december 17, 2022
 
