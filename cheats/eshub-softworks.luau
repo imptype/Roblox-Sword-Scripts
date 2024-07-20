@@ -1,4 +1,5 @@
 -- source https://pastebin.com/iZXXiiAU
+-- built on top of brew-reach.luau
 -- updated at april 12, 2024
 
 -- ESHub Softworks -- SwordHax v3; Made with Code <3
