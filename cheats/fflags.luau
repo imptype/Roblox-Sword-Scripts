@@ -2,10 +2,11 @@
 -- source https://scriptblox.com/script/Universal-Script-Mobile-FFlag-fps-booster-13139
 -- flags source https://www.youtube.com/watch?v=TPAYh3G8rBs
 -- source for flags https://github.com/MaximumADHD/Roblox-FFlag-Tracker
+-- updated at january 3, 2024
 
 --[[
 	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
+]]--
 task.spawn(function()
 local flagtables = {
   ["FFlagDebugSimIntegrationStabilityTesting"] = "True", -- speed
