@@ -1,4 +1,5 @@
--- source https://pastebin.com/search?q=sword+reach
+-- source https://pastebin.com/e8uV674D
+-- edited version at eshub-softworks.luau
 -- updated at july 1, 2024
 
 ---- General Variables & Functions ----
