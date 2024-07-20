@@ -1,5 +1,7 @@
 -- source https://www.youtube.com/watch?v=3LlVE7imQeA
 -- alt source https://pastebin.com/4cxpFYdT
+-- source2 https://www.youtube.com/watch?v=CcjdlQXeyiY
+-- alt source2 https://pastebin.com/v85uKg67
 -- updated at may 15, 2023
 
 local active = true
