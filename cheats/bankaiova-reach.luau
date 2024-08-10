@@ -10,13 +10,12 @@ local Reach = Instance.new("TextLabel")
 local Credits = Instance.new("TextLabel")
 local Bypass = Instance.new("TextButton")
 local Open = Instance.new("TextButton")
- 
+
 -- Properties
- 
+
 Bankai.Name = "Bankai"
 Bankai.Parent = game.CoreGui
- 
- 
+
 Mayonaise.Name = "Mayonaise"
 Mayonaise.Parent = Bankai
 Mayonaise.BackgroundColor3 = Color3.new(0.156863, 0.156863, 0.156863)
@@ -27,9 +26,9 @@ Mayonaise.Size = UDim2.new(0, 216, 0, 294)
 Mayonaise.Visible = false
 Mayonaise.Active = true
 Mayonaise.Draggable = true
- 
+
 -- Main Gui
- 
+
 Title.Name = "Title"
 Title.Parent = Mayonaise
 Title.BackgroundColor3 = Color3.new(0.227451, 0.227451, 0.227451)
@@ -42,9 +41,9 @@ Title.TextColor3 = Color3.new(0, 0, 0)
 Title.TextScaled = true
 Title.TextSize = 14
 Title.TextWrapped = true
- 
+
 -- Circle Button
- 
+
 Circle.Name = "Circle"
 Circle.Parent = Mayonaise
 Circle.BackgroundColor3 = Color3.new(0.227451, 0.227451, 0.227451)
@@ -58,53 +57,53 @@ Circle.TextColor3 = Color3.new(1, 1, 1)
 Circle.TextScaled = true
 Circle.TextSize = 14
 Circle.TextWrapped = true
- 
+
 -- Reach Script
- 
+
 Circle.MouseButton1Down:connect(function()
-wait(0.25)
-	_G.Size = 5
-	local Mouse = game.Players.LocalPlayer:GetMouse()
-	Mouse.KeyDown:Connect(function(key)
-		if key == "q" then
-			_G.Size = _G.Size + 1 
- 
-			for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do 
-				if v:IsA("Tool") then
-					Handle = v.Handle 
-					Sphere = Instance.new("SelectionSphere",Handle)
-					Sphere.Adornee = Handle
-					Sphere.Color3 = Color3.new(255,255,255)
-					v.Handle.Size = Vector3.new(_G.Size,_G.Size,_G.Size)
-					Handle.CanCollide = false
-					Handle.Massless = true
-				end
-			end
-		end
-	end)
- 
-	local Mouse = game.Players.LocalPlayer:GetMouse()
-	Mouse.KeyDown:Connect(function(key)
-		if key == "e" then
-			_G.Size = _G.Size - 1 
- 
-			for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do 
-				if v:IsA("Tool") then
-					Handle = v.Handle 
-					Sphere = Instance.new("SelectionSphere",Handle)
-					Sphere.Adornee = Handle
-					Sphere.Color3 = Color3.new(255,255,255)
-					v.Handle.Size = Vector3.new(_G.Size,_G.Size,_G.Size)
-					Handle.CanCollide = false
-					Handle.Massless = true
-				end
-			end
-		end
-	end)
+    wait(0.25)
+    _G.Size = 5
+    local Mouse = game.Players.LocalPlayer:GetMouse()
+    Mouse.KeyDown:Connect(function(key)
+        if key == "q" then
+            _G.Size = _G.Size + 1
+
+            for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                if v:IsA("Tool") then
+                    Handle = v.Handle
+                    Sphere = Instance.new("SelectionSphere", Handle)
+                    Sphere.Adornee = Handle
+                    Sphere.Color3 = Color3.new(255, 255, 255)
+                    v.Handle.Size = Vector3.new(_G.Size, _G.Size, _G.Size)
+                    Handle.CanCollide = false
+                    Handle.Massless = true
+                end
+            end
+        end
+    end)
+
+    local Mouse = game.Players.LocalPlayer:GetMouse()
+    Mouse.KeyDown:Connect(function(key)
+        if key == "e" then
+            _G.Size = _G.Size - 1
+
+            for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                if v:IsA("Tool") then
+                    Handle = v.Handle
+                    Sphere = Instance.new("SelectionSphere", Handle)
+                    Sphere.Adornee = Handle
+                    Sphere.Color3 = Color3.new(255, 255, 255)
+                    v.Handle.Size = Vector3.new(_G.Size, _G.Size, _G.Size)
+                    Handle.CanCollide = false
+                    Handle.Massless = true
+                end
+            end
+        end
+    end)
 end)
- 
+
 -- Reach Instructions
- 
+
 Reach.Name = "Reach"
 Reach.Parent = Circle
 Reach.BackgroundColor3 = Color3.new(1, 1, 1)
@@ -118,9 +117,9 @@ Reach.TextColor3 = Color3.new(1, 1, 1)
 Reach.TextScaled = true
 Reach.TextSize = 14
 Reach.TextWrapped = true
- 
+
 -- Credits
- 
+
 Credits.Name = "Credits"
 Credits.Parent = Mayonaise
 Credits.BackgroundColor3 = Color3.new(1, 1, 1)
@@ -134,7 +133,7 @@ Credits.TextColor3 = Color3.new(1, 1, 1)
 Credits.TextScaled = true
 Credits.TextSize = 14
 Credits.TextWrapped = true
- 
+
 -- Bypass
 Bypass.Name = "Bypass"
 Bypass.Parent = Mayonaise
@@ -149,26 +148,26 @@ Bypass.TextColor3 = Color3.new(1, 1, 1)
 Bypass.TextScaled = true
 Bypass.TextSize = 14
 Bypass.TextWrapped = true
- 
+
 -- Bypass Script
- 
+
 Bypass.MouseButton1Down:connect(function()
-	local mt = getrawmetatable(game)
-	local OldNC = mt.__namecall
-	setreadonly(mt,false)
- 
-	mt.__namecall = function(arg,...)
-		local args = {...}
-		local Method = getnamecallmethod()
-		if (Method == 'Kick' or Method == 'InvokeServer') then
-			return wait(9e9)
-		end
-		return OldNC(arg,...)
-	end
+    local mt = getrawmetatable(game)
+    local OldNC = mt.__namecall
+    setreadonly(mt, false)
+
+    mt.__namecall = function(arg, ...)
+        local args = { ... }
+        local Method = getnamecallmethod()
+        if Method == "Kick" or Method == "InvokeServer" then
+            return wait(9e9)
+        end
+        return OldNC(arg, ...)
+    end
 end)
- 
+
 -- Open Button
- 
+
 Open.Name = "Open"
 Open.Parent = Bankai
 Open.BackgroundColor3 = Color3.new(0.105882, 0.105882, 0.105882)
@@ -182,19 +181,18 @@ Open.TextColor3 = Color3.new(1, 1, 1)
 Open.TextScaled = true
 Open.TextSize = 14
 Open.TextWrapped = true
- 
+
 -- Open Button Click Invisible Function
- 
+
 Open.MouseButton1Down:connect(function()
-	wait(0.25)
-	Open.Visible = false
+    wait(0.25)
+    Open.Visible = false
 end)
- 
- 
+
 -- Main Gui Visibile Function
- 
-while wait(0.25)do
-	if Open.Visible == false then
-		Mayonaise.Visible = true
-	end
+
+while wait(0.25) do
+    if Open.Visible == false then
+        Mayonaise.Visible = true
+    end
 end

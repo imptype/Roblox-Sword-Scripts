@@ -2,21 +2,23 @@
 -- alt source https://github.com/UnknownKellyMC9/CustomScripts/blob/main/Scripts/Hitbox_Expander.lua
 -- updated at april 28, 2024
 
-local GUILibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/UnknownKellyMC9/CustomScripts/main/UI_Library/Kavo.lua"))()
+local GUILibrary = loadstring(
+    game:HttpGet("https://raw.githubusercontent.com/UnknownKellyMC9/CustomScripts/main/UI_Library/Kavo.lua")
+)()
 
-local Players = game:GetService('Players')
+local Players = game:GetService("Players")
 local Building = false
 local Development = true
 
 if Development then
-   game:GetService("StarterGui"):SetCore("SendNotification", {
-       Title = "Development In Progress";
-       Text = "This script is in development, you can cause the bugs easily";
-       Duration = 35
-   })
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Development In Progress",
+        Text = "This script is in development, you can cause the bugs easily",
+        Duration = 35,
+    })
 end
 
-local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
+local RunLoops = { RenderStepTable = {}, StepTable = {}, HeartTable = {} }
 
 do
     function RunLoops:BindToRenderStep(name, num, func)
@@ -77,25 +79,25 @@ end
 
 local Windows = GUILibrary:CreateWindow({
     ["Title"] = "Hitbox Expander",
-    ["Theme"] = "BloodTheme"
+    ["Theme"] = "BloodTheme",
 })
 
 local Tabs = {
     ["Main"] = Windows.NewTab("Main"),
-    ["Details"] = Windows.NewTab("Details")
+    ["Details"] = Windows.NewTab("Details"),
 }
 
 local Sections = {
-    ["Settings"] = Tabs["Main"].NewSection("Settings"), 
-    ["GUI"] = Tabs["Details"].NewSection("Details")
+    ["Settings"] = Tabs["Main"].NewSection("Settings"),
+    ["GUI"] = Tabs["Details"].NewSection("Details"),
 }
 
 runcode(function()
     local Executed = false
-    local HitboxExpansion = {["Enabled"] = false}
-    local HitboxTeam = {["Enabled"] = false}
-    local HitboxSize = {["Value"] = 5}
-    local HitboxTransparency = {["Value"] = 1}
+    local HitboxExpansion = { ["Enabled"] = false }
+    local HitboxTeam = { ["Enabled"] = false }
+    local HitboxSize = { ["Value"] = 5 }
+    local HitboxTransparency = { ["Value"] = 1 }
 
     local function updateHitboxSettings()
         local localPlayer = Players.LocalPlayer
@@ -122,18 +124,19 @@ runcode(function()
     Sections["Settings"].NewToggle({
         ["Name"] = "Hitbox Toggle",
         ["Function"] = function(call)
-            HitboxExpansion["Enabled"] = call do
+            HitboxExpansion["Enabled"] = call
+            do
                 if not Executed then
-	                game:GetService("StarterGui"):SetCore("SendNotification", {
-	                    Title = "Recommended";
-					    Text = "Adjust the Hitbox Transparency to make hitbox visible or invisible.";
-					    Duration = 25
-					})
-			    end
+                    game:GetService("StarterGui"):SetCore("SendNotification", {
+                        Title = "Recommended",
+                        Text = "Adjust the Hitbox Transparency to make hitbox visible or invisible.",
+                        Duration = 25,
+                    })
+                end
                 Executed = true
             end
         end,
-        ["InfoText"] = "Toggles the current hitbox state."
+        ["InfoText"] = "Toggles the current hitbox state.",
     })
 
     Sections["Settings"].NewToggle({
@@ -141,7 +144,7 @@ runcode(function()
         ["Function"] = function(call)
             HitboxTeam["Enabled"] = call
         end,
-        ["InfoText"] = "Prevents your own team being affected."
+        ["InfoText"] = "Prevents your own team being affected.",
     })
 
     Sections["Settings"].NewSlider({
@@ -152,7 +155,7 @@ runcode(function()
         ["Function"] = function(val)
             HitboxSize["Value"] = val
         end,
-        ["InfoText"] = "Increases the size of the hitbox."
+        ["InfoText"] = "Increases the size of the hitbox.",
     })
 
     Sections["Settings"].NewSlider({
@@ -163,6 +166,6 @@ runcode(function()
         ["Function"] = function(val)
             HitboxTransparency["Value"] = 1 - (val / 100)
         end,
-        ["InfoText"] = "Increases the transparency of the hitbox."
+        ["InfoText"] = "Increases the transparency of the hitbox.",
     })
 end)

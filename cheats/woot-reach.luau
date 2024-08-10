@@ -16,7 +16,7 @@ visualizer.BrickColor = BrickColor.Blue()
 visualizer.Transparency = 0.3
 visualizer.Anchored = true
 visualizer.CanCollide = false
-visualizer.Size = Vector3.new(0.5,0.5,0.5)
+visualizer.Size = Vector3.new(0.5, 0.5, 0.5)
 visualizer.BottomSurface = Enum.SurfaceType.Smooth
 visualizer.TopSurface = Enum.SurfaceType.Smooth
 visualizer.Material = Enum.Material.ForceField
@@ -39,7 +39,6 @@ selectionbox.Transparency = 0
 selectionbox.SurfaceTransparency = 0.9
 selectionbox.Visible = true
 
-
 local ProjectSFF = Instance.new("ScreenGui")
 local main = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
@@ -59,8 +58,6 @@ local Custom = Instance.new("TextLabel")
 local F = Instance.new("TextLabel")
 local Ftext = Instance.new("TextLabel")
 local Line2 = Instance.new("TextLabel")
-
-
 
 ProjectSFF.Name = "Project SFF"
 ProjectSFF.Parent = game.CoreGui
@@ -270,160 +267,163 @@ Line2.Text = "-------------------------------------"
 Line2.TextColor3 = Color3.fromRGB(255, 255, 255)
 Line2.TextSize = 50.000
 
-repeat wait() until game.Players.LocalPlayer
-
-
+repeat
+    wait()
+until game.Players.LocalPlayer
 
 game:GetService("StarterGui"):SetCore("SendNotification", {
-	Title = "Woot Reach Loaded!";
-	Text  = "Press X to view controls";
-	Icon = "";
-	Duration = 8;
+    Title = "Woot Reach Loaded!",
+    Text = "Press X to view controls",
+    Icon = "",
+    Duration = 8,
 })
 
 local mouse = game.Players.LocalPlayer:GetMouse()
 
 bindx = "x"
 mouse.KeyDown:connect(function(keyx)
-	if keyx == bindx then
-		if main.Visible == false then
-			main.Visible = true
-		elseif main.Visible == true then
-			main.Visible = false
-		end
-	end
+    if keyx == bindx then
+        if main.Visible == false then
+            main.Visible = true
+        elseif main.Visible == true then
+            main.Visible = false
+        end
+    end
 end)
 
 binde = "e"
 mouse.KeyDown:connect(function(keye)
-	if keye == binde then
-		dmgEnabled = true
-		visualizerEnabled = true
-	end
+    if keye == binde then
+        dmgEnabled = true
+        visualizerEnabled = true
+    end
 end)
 
 bindq = "q"
 mouse.KeyDown:connect(function(keyq)
-	if keyq == bindq then
-		dmgEnabled = false
-		visualizerEnabled = false
-	end
+    if keyq == bindq then
+        dmgEnabled = false
+        visualizerEnabled = false
+    end
 end)
 
 bindf = "f"
 mouse.KeyDown:connect(function(keyf)
-	if keyf == bindf then
-		visualizerEnabled = not visualizerEnabled
-	end
+    if keyf == bindf then
+        visualizerEnabled = not visualizerEnabled
+    end
 end)
 
 local plr = game.Players.LocalPlayer
 
-local function onHit(hit,handle)
-	local victim = hit.Parent:FindFirstChildOfClass("Humanoid")
-	if victim and victim.Parent.Name ~= game.Players.LocalPlayer.Name then
-		if dmgEnabled then
-			for _,v in pairs(hit.Parent:GetChildren()) do
-				if v:IsA("Part") then
-					firetouchinterest(v,handle,0)
-					firetouchinterest(v,handle,1)
-				end
-			end
-		else
-			firetouchinterest(hit,handle,0)
-			firetouchinterest(hit,handle,1)
-		end
-	end
+local function onHit(hit, handle)
+    local victim = hit.Parent:FindFirstChildOfClass("Humanoid")
+    if victim and victim.Parent.Name ~= game.Players.LocalPlayer.Name then
+        if dmgEnabled then
+            for _, v in pairs(hit.Parent:GetChildren()) do
+                if v:IsA("Part") then
+                    firetouchinterest(v, handle, 0)
+                    firetouchinterest(v, handle, 1)
+                end
+            end
+        else
+            firetouchinterest(hit, handle, 0)
+            firetouchinterest(hit, handle, 1)
+        end
+    end
 end
 
 local function getWhiteList()
-	local wl = {}
-	for _,v in pairs(game.Players:GetPlayers()) do
-		if v ~= plr then
-			local char = v.Character
-			if char then
-				for _,q in pairs(char:GetChildren()) do
-					if q:IsA("Part") then
-						table.insert(wl,q)
-					end
-				end
-			end
-		end
-	end
-	return wl
-	-- WAIT WHAT EVOCUL WAS DOWN HERE TOO WHAT? WHO IS THIS MAD MAN????
+    local wl = {}
+    for _, v in pairs(game.Players:GetPlayers()) do
+        if v ~= plr then
+            local char = v.Character
+            if char then
+                for _, q in pairs(char:GetChildren()) do
+                    if q:IsA("Part") then
+                        table.insert(wl, q)
+                    end
+                end
+            end
+        end
+    end
+    return wl
+    -- WAIT WHAT EVOCUL WAS DOWN HERE TOO WHAT? WHO IS THIS MAD MAN????
 end
 
 TextButton.MouseButton1Down:connect(function()
-	reach = TextBox.Text
+    reach = TextBox.Text
 end)
 
 bindr = "r"
 mouse.KeyDown:connect(function(keyr)
-	if keyr == bindr then
-		reach = reach + 0.5
-	end
+    if keyr == bindr then
+        reach = reach + 0.5
+    end
 end)
 
 bindt = "t"
 mouse.KeyDown:connect(function(keyt)
-	if keyt == bindt then
-		reach = reach - 0.5
-	end
+    if keyt == bindt then
+        reach = reach - 0.5
+    end
 end)
 local cooldown = false
 game:GetService("RunService").RenderStepped:connect(function()
-	if not active or not trueActive then return end
-	local s = plr.Character and plr.Character:FindFirstChildOfClass("Tool")
-	if not s then 
-		visualizer.Parent = nil 
-		visualizer2.Parent = nil 
-	end
-	if s then
-		local handle = s:FindFirstChild("Handle") or s:FindFirstChildOfClass("Part")
-		if handle then
-			if visualizerEnabled then
-				visualizer.Parent = workspace
-				visualizer2.Parent = workspace
-			else
-				visualizer.Parent = nil
-				visualizer2.Parent = nil
-			end
-			if reach then
-				if reachType == "Sphere" then
-					visualizer2.Size = Vector3.new(reach*2,0.05,reach*2)
-					visualizer.CFrame = handle.CFrame
-					visualizer2.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -2.95, 0)
-					for _,v in pairs(game.Players:GetPlayers()) do
-						local hrp = v.Character and v.Character:FindFirstChild("HumanoidRootPart")
-						if hrp and handle then
-							local mag = (hrp.Position - handle.Position).magnitude
-							if tonumber(mag) <= tonumber(reach) and cooldown == false then
-								cooldown = true
-								onHit(hrp,handle)
-								wait(0.1)
-								cooldown = false
-							end
-						end
-					end
-				end
-			end
-		end
-	end
+    if not active or not trueActive then
+        return
+    end
+    local s = plr.Character and plr.Character:FindFirstChildOfClass("Tool")
+    if not s then
+        visualizer.Parent = nil
+        visualizer2.Parent = nil
+    end
+    if s then
+        local handle = s:FindFirstChild("Handle") or s:FindFirstChildOfClass("Part")
+        if handle then
+            if visualizerEnabled then
+                visualizer.Parent = workspace
+                visualizer2.Parent = workspace
+            else
+                visualizer.Parent = nil
+                visualizer2.Parent = nil
+            end
+            if reach then
+                if reachType == "Sphere" then
+                    visualizer2.Size = Vector3.new(reach * 2, 0.05, reach * 2)
+                    visualizer.CFrame = handle.CFrame
+                    visualizer2.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                        * CFrame.new(0, -2.95, 0)
+                    for _, v in pairs(game.Players:GetPlayers()) do
+                        local hrp = v.Character and v.Character:FindFirstChild("HumanoidRootPart")
+                        if hrp and handle then
+                            local mag = (hrp.Position - handle.Position).magnitude
+                            if tonumber(mag) <= tonumber(reach) and cooldown == false then
+                                cooldown = true
+                                onHit(hrp, handle)
+                                wait(0.1)
+                                cooldown = false
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
 end)
 
 local i = 0
 while wait() do
-	if i >= 0.99 then
-		i = 0
-	elseif i < 1 then
-		i = i+0.009
-	end
+    if i >= 0.99 then
+        i = 0
+    elseif i < 1 then
+        i = i + 0.009
+    end
 
-	local h = tonumber(i)
-	local color = Color3.fromHSV(h, 1, 0.8)
+    local h = tonumber(i)
+    local color = Color3.fromHSV(h, 1, 0.8)
 
-	visualizer.Color = color
-	selectionbox.Color3 = color
-	selectionbox.SurfaceColor3 = color
+    visualizer.Color = color
+    selectionbox.Color3 = color
+    selectionbox.SurfaceColor3 = color
 end

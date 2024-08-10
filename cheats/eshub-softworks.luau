@@ -21,7 +21,7 @@ ESHub = {
     reachMagnitude = Vector3.new(1, 0.800000011920929, 4),
     reachType = "Box",
     selBox = false,
-    selBoxColor = Color3.fromRGB(0,0,0),
+    selBoxColor = Color3.fromRGB(0, 0, 0),
 
     cWalkspeed = 16,
     cJumppower = 50,
@@ -29,7 +29,7 @@ ESHub = {
     CFSpeed = 1.35,
 
     Autoclick = false,
-    Spin = false
+    Spin = false,
 }
 
 function ESHub:Interpolate(part, targetCFrame, duration)
@@ -40,10 +40,8 @@ function ESHub:Interpolate(part, targetCFrame, duration)
             local elapsedTime = tick() - startTime
             local t = elapsedTime / duration
             local lerpedCFrame = startCFrame:Lerp(targetCFrame, t)
-            local slerpedCFrame = CFrame.new(
-                lerpedCFrame.Position,
-                targetCFrame.Position
-            ):lerp(lerpedCFrame, math.sin(t * math.pi * 0.5))
+            local slerpedCFrame = CFrame.new(lerpedCFrame.Position, targetCFrame.Position)
+                :lerp(lerpedCFrame, math.sin(t * math.pi * 0.5))
 
             part.CFrame = slerpedCFrame
             game:GetService("RunService").Heartbeat:Wait()
@@ -86,10 +84,10 @@ function ESHub:disableConnection(Connection)
     end
 end
 function ESHub:getSword()
-    return ESHub:WaitForChildOfClass({Player.Character, Player.Backpack}, "Tool")
+    return ESHub:WaitForChildOfClass({ Player.Character, Player.Backpack }, "Tool")
 end
 function ESHub:getHitbox()
-    for i,v in pairs(ESHub:getSword():GetDescendants()) do
+    for i, v in pairs(ESHub:getSword():GetDescendants()) do
         if v:FindFirstChildOfClass("TouchTransmitter") then
             v.Massless = true
             return v
@@ -104,11 +102,16 @@ function ESHub:doReach()
     damageAmplification = ESHub:getHitbox().Touched:Connect(function(part)
         if ESHub.isReach == true and ESHub.damageAmp == true and part.Parent:FindFirstChildOfClass("Humanoid") then
             local victimCharacter = part.Parent
-            for i,v in pairs(victimCharacter:GetChildren()) do
-                if v:IsA("Part") and victimCharacter.Humanoid.Health ~= 0 and victimCharacter.Humanoid.Health > 0 and victimCharacter.Name ~= Player.Name then
+            for i, v in pairs(victimCharacter:GetChildren()) do
+                if
+                    v:IsA("Part")
+                    and victimCharacter.Humanoid.Health ~= 0
+                    and victimCharacter.Humanoid.Health > 0
+                    and victimCharacter.Name ~= Player.Name
+                then
                     task.spawn(function()
                         firetouchinterest(v, ESHub:getHitbox(), 0)
-                        wait();
+                        wait()
                         firetouchinterest(v, ESHub:getHitbox(), 1)
                     end)
                 end
@@ -146,7 +149,7 @@ end
 function ESHub:undoSelBox()
     if ESHub:getHitbox() and ESHub:getHitbox():FindFirstChildOfClass("SelectionBox") then
         ESHub.selBox = false
-        wait(.15)
+        wait(0.15)
         ESHub:getHitbox():FindFirstChildOfClass("SelectionBox"):Destroy()
     end
 end
@@ -157,7 +160,7 @@ function ESHub:Patch()
     ESHub:Spoof(Weld, "Parent", nil)
     Seat.Transparency = 1
     Seat.CanCollide = false
-    wait(.2);
+    wait(0.2)
     Player.Character["HumanoidRootPart"].Anchored = true
     Seat.Parent = workspace
     Seat.CFrame = Player.Character["HumanoidRootPart"].CFrame
@@ -170,33 +173,37 @@ function ESHub:Patch()
 end
 
 ---- Init ESHub ----
-print[[----------------------------------
+print([[----------------------------------
 | __ ) _ __ _____      __
 |  _ \| '__/ _ \ \ /\ / /
 | |_) | | |  __/\ V  V /
 |____/|_|  \___| \_/\_/    @dex4tw - bleh
-----------------------------------------------]]
+----------------------------------------------]])
 ESHub:disableConnection(game:GetService("ScriptContext").Error)
 
 -- Init UI Library --
-local Library = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/Vape.txt")()
-local Window = Library:Window("ESHub ("..game.PlaceId..")",Color3.fromRGB(0, 0, 0), Enum.KeyCode.RightControl)
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/Vape.txt"))()
+local Window = Library:Window("ESHub (" .. game.PlaceId .. ")", Color3.fromRGB(0, 0, 0), Enum.KeyCode.RightControl)
 local WindowInstance = game:GetService("CoreGui"):WaitForChild("ui")
-WindowInstance.Main:WaitForChild("Title").Text = "ESHub - Waiting For Sword ("..game.PlaceId..")"
-Sword = ESHub:WaitForChildOfClass({Player.Character, Player.Backpack}, "Tool")
-WindowInstance.Main:WaitForChild("Title").Text = "ESHub ("..game.PlaceId..")"
+WindowInstance.Main:WaitForChild("Title").Text = "ESHub - Waiting For Sword (" .. game.PlaceId .. ")"
+Sword = ESHub:WaitForChildOfClass({ Player.Character, Player.Backpack }, "Tool")
+WindowInstance.Main:WaitForChild("Title").Text = "ESHub (" .. game.PlaceId .. ")"
 local HomeTab = Window:Tab("Home")
 local SwordTab = Window:Tab("Mods")
 local CharacterTab = Window:Tab("Character")
 local AppearanceTab = Window:Tab("Appearance")
 
 -- Alert user of Executor --
-Library:Notification("Warning", "Please make sure you are using a proper executor, if not this may be detected.", "Okay")
+Library:Notification(
+    "Warning",
+    "Please make sure you are using a proper executor, if not this may be detected.",
+    "Okay"
+)
 
 -- Prevent Client-Sided Anticheat --
 ESHub:disableConnection(ESHub:getHitbox():GetPropertyChangedSignal("Size"))
 
--- Setting Reconstruction -- 
+-- Setting Reconstruction --
 Player.Character.Humanoid.Died:Connect(function()
     ESHub:Spoof(Player.Character.Humanoid, "WalkSpeed", 16)
     ESHub:Spoof(Player.Character.Humanoid, "JumpPower", 50)
@@ -212,8 +219,8 @@ end)
 Player.CharacterAdded:Connect(function()
     -- Re-do Settings --
     ESHub:getSword() -- wait for sword
-    wait(.25)
-    for i,v in pairs(ESHub:getSword():GetDescendants()) do
+    wait(0.25)
+    for i, v in pairs(ESHub:getSword():GetDescendants()) do
         if v:FindFirstChildOfClass("TouchTransmitter") then
             v.Massless = true
         end
@@ -231,9 +238,10 @@ Player.CharacterAdded:Connect(function()
     task.spawn(function()
         if ESHub.Spin then
             if not Player.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("BodyAngularVelocity") then
-                local Velocity = Instance.new("BodyAngularVelocity", Player.Character:FindFirstChild("HumanoidRootPart"))
-                Velocity.AngularVelocity = Vector3.new(0,75,0)
-                Velocity.MaxTorque = Vector3.new(0,9e9,0)
+                local Velocity =
+                    Instance.new("BodyAngularVelocity", Player.Character:FindFirstChild("HumanoidRootPart"))
+                Velocity.AngularVelocity = Vector3.new(0, 75, 0)
+                Velocity.MaxTorque = Vector3.new(0, 9e9, 0)
                 Velocity.P = 1250
             end
         end
@@ -262,21 +270,21 @@ SwordTab:Toggle("Damage Amp", false, function(value)
     end
 end)
 
-SwordTab:Textbox("Reach Magnitude",true, function(text)
+SwordTab:Textbox("Reach Magnitude", true, function(text)
     if ESHub.reachType == "Box" then
         ESHub.reachMagnitude = Vector3.new(tonumber(text), tonumber(text), tonumber(text))
     elseif ESHub.reachType == "Linear" then
         ESHub.reachMagnitude = Vector3.new(1, 0.800000011920929, tonumber(text))
     elseif ESHub.reachType == "Wide" then
-        ESHub.reachMagnitude = Vector3.new(tonumber(text) * .3, tonumber(text) * .3, tonumber(text))
+        ESHub.reachMagnitude = Vector3.new(tonumber(text) * 0.3, tonumber(text) * 0.3, tonumber(text))
     end
 end)
 
-SwordTab:Dropdown("Reach Method",{"Sword Spoofing"}, function(option)
+SwordTab:Dropdown("Reach Method", { "Sword Spoofing" }, function(option)
     ESHub.curReach = option
 end)
 
-SwordTab:Dropdown("Reach Type",{"Box", "Linear", "Wide"}, function(option)
+SwordTab:Dropdown("Reach Type", { "Box", "Linear", "Wide" }, function(option)
     ESHub.reachType = option
     lastMagnitude = ESHub.reachMagnitude
 
@@ -286,7 +294,7 @@ SwordTab:Dropdown("Reach Type",{"Box", "Linear", "Wide"}, function(option)
     elseif ESHub.reachType == "Linear" then
         ESHub.reachMagnitude = Vector3.new(1, 0.800000011920929, lastMagnitude.Z)
     elseif ESHub.reachType == "Wide" then
-        ESHub.reachMagnitude = Vector3.new(lastMagnitude.Z * .3, lastMagnitude.Z * .3, lastMagnitude.Z)
+        ESHub.reachMagnitude = Vector3.new(lastMagnitude.Z * 0.3, lastMagnitude.Z * 0.3, lastMagnitude.Z)
     end
 
     -- Restart Reach
@@ -307,11 +315,11 @@ SwordTab:Toggle("SelectionBox", false, function(value)
     end
 end)
 
-SwordTab:Colorpicker("SelectionBox Color",Color3.fromRGB(0,0,0), function(color)
-	ESHub.selBoxColor = color
+SwordTab:Colorpicker("SelectionBox Color", Color3.fromRGB(0, 0, 0), function(color)
+    ESHub.selBoxColor = color
 end)
 
-SwordTab:Toggle("Autoclick",false, function(value)
+SwordTab:Toggle("Autoclick", false, function(value)
     if value == true then
         ESHub.Autoclick = true
         while ESHub.Autoclick do
@@ -325,43 +333,43 @@ SwordTab:Toggle("Autoclick",false, function(value)
     end
 end)
 
-CharacterTab:Toggle("Spin",false, function(value)
+CharacterTab:Toggle("Spin", false, function(value)
     if value == true then
-		ESHub.Spin = true
+        ESHub.Spin = true
         if not Player.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("BodyAngularVelocity") then
             local Velocity = Instance.new("BodyAngularVelocity", Player.Character:FindFirstChild("HumanoidRootPart"))
-            Velocity.AngularVelocity = Vector3.new(0,75,0)
-            Velocity.MaxTorque = Vector3.new(0,9e9,0)
+            Velocity.AngularVelocity = Vector3.new(0, 75, 0)
+            Velocity.MaxTorque = Vector3.new(0, 9e9, 0)
             Velocity.P = 1250
         end
-	elseif value == false then
-		ESHub.Spin = false
+    elseif value == false then
+        ESHub.Spin = false
         if Player.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("BodyAngularVelocity") then
             Player.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("BodyAngularVelocity"):Destroy()
         end
-	end
+    end
 end)
 
-CharacterTab:Textbox("Speed",true, function(ws)
+CharacterTab:Textbox("Speed", true, function(ws)
     ESHub:Spoof(Player.Character:WaitForChild("Humanoid"), "WalkSpeed", 16)
-	Player.Character:WaitForChild("Humanoid").WalkSpeed = tonumber(ws)
+    Player.Character:WaitForChild("Humanoid").WalkSpeed = tonumber(ws)
     ESHub.cWalkspeed = tonumber(ws)
 end)
 
-CharacterTab:Textbox("Jumppower",true, function(jp)
+CharacterTab:Textbox("Jumppower", true, function(jp)
     ESHub:Spoof(Player.Character:WaitForChild("Humanoid"), "JumpPower", 50)
-	Player.Character:WaitForChild("Humanoid").JumpPower = tonumber(jp)
-	ESHub.cJumppower = tonumber(jp)
+    Player.Character:WaitForChild("Humanoid").JumpPower = tonumber(jp)
+    ESHub.cJumppower = tonumber(jp)
 end)
 
-AppearanceTab:Colorpicker("Accent Color",Color3.fromRGB(0,0,0), function(t)
-	Library:ChangePresetColor(Color3.fromRGB(t.R * 255, t.G * 255, t.B * 255))
+AppearanceTab:Colorpicker("Accent Color", Color3.fromRGB(0, 0, 0), function(t)
+    Library:ChangePresetColor(Color3.fromRGB(t.R * 255, t.G * 255, t.B * 255))
 end)
 
 AppearanceTab:Bind("Toggle UI", Enum.KeyCode.LeftControl, function()
-	if WindowInstance.Enabled then
-		WindowInstance.Enabled = false
-	elseif WindowInstance.Enabled == false then
-		WindowInstance.Enabled = true
-	end
+    if WindowInstance.Enabled then
+        WindowInstance.Enabled = false
+    elseif WindowInstance.Enabled == false then
+        WindowInstance.Enabled = true
+    end
 end)

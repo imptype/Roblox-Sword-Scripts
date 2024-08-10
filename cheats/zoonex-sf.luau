@@ -4,10 +4,10 @@
 -- Obtain the player's character
 local player = game.Players.LocalPlayer
 local character = player.Character
- 
+
 -- Define the maximum range distance for looking at other players
 getgenv().maxRange = 20 -- Adjust this value to your desired maximum range
- 
+
 -- Define the toggle key
 getgenv().ToggleKey1 = Enum.KeyCode.R -- Adjust this key to your desired toggle key
 getgenv().teleportKey = Enum.KeyCode.T -- Adjust this key to your desired teleport key
@@ -20,18 +20,18 @@ getgenv().ReachSizeY = 30
 getgenv().ReachSizeX = 30
 getgenv().ReachSizeZ = 30
 getgenv().ReachType = "Enum.PartType.Ball"
- 
+
 -- Reach types --
- 
+
 -- Block
 -- CornerWedge
 -- Cylinder
 -- Wedge
 -- Ball
- 
+
 -- Track the toggle state
 local toggleEnabled = false
- 
+
 -- Create a Highlight part
 local highlightPart = Instance.new("Part")
 highlightPart.Name = "Highlight"
@@ -42,9 +42,9 @@ highlightPart.CanCollide = false
 highlightPart.TopSurface = Enum.SurfaceType.Smooth
 highlightPart.BottomSurface = Enum.SurfaceType.Smooth
 highlightPart.Parent = workspace
- 
+
 local targetParts = { "HumanoidRootPart" } -- Add more part names if needed
- 
+
 local function updateLookDirection()
     if character and toggleEnabled then
         -- Get all target parts in the game within the range
@@ -63,7 +63,7 @@ local function updateLookDirection()
                 end
             end
         end
- 
+
         -- Find the closest part with a living Humanoid
         local closestPart = nil
         local closestDistance = math.huge
@@ -78,7 +78,7 @@ local function updateLookDirection()
                 end
             end
         end
- 
+
         -- Update the player's look direction if a closest part is found
         if closestPart then
             local lookVector = (closestPart.Position - playerPosition).Unit
@@ -106,10 +106,10 @@ local function updateLookDirection()
             end
             local lookRotation = CFrame.lookAt(Vector3.new(), lookVector)
             character.HumanoidRootPart.CFrame = CFrame.new(playerPosition) * lookRotation
- 
+
             -- Set the Highlight part's CFrame to match the target's position
             highlightPart.CFrame = CFrame.new(closestPart.Position)
- 
+
             local tool2 = player.Character:FindFirstChildOfClass("Tool")
             if not tool2 and getgenv().autoActivateToolEnabled then
                 -- Search for the tool in a loop until it becomes available
@@ -118,28 +118,28 @@ local function updateLookDirection()
                     tool2 = player.Character:FindFirstChildOfClass("Tool")
                 end
             end
- 
+
             if tool2 and getgenv().autoActivateToolEnabled then
                 tool2:Activate()
                 tool2:Activate()
             end
- 
+
             -- Check if the teleport key is pressed and teleport behind the target
-            if game:GetService("UserInputService"):IsKeyDown(getgenv().teleportKey) then    
+            if game:GetService("UserInputService"):IsKeyDown(getgenv().teleportKey) then
                 local teleportOffset = getgenv().TPDistance -- Adjust this value to control the distance of the teleport
- 
-            if getgenv().randomizeTeleport then
-                getgenv().randomness = 2  -- Adjust this value to control the amount of randomness
-                teleportOffset = teleportOffset + math.random(-randomness, randomness)
-            end
- 
+
+                if getgenv().randomizeTeleport then
+                    getgenv().randomness = 2 -- Adjust this value to control the amount of randomness
+                    teleportOffset = teleportOffset + math.random(-randomness, randomness)
+                end
+
                 local teleportPosition = closestPart.Position - closestPart.CFrame.LookVector * teleportOffset
- 
+
                 -- Set the character's look direction towards the target
                 local lookVector = (closestPart.Position - teleportPosition).Unit
                 lookVector = Vector3.new(lookVector.X, 0, lookVector.Z).Unit
                 local lookRotation = CFrame.lookAt(Vector3.new(), lookVector)
- 
+
                 -- Teleport the character and set the look direction
                 character.HumanoidRootPart.CFrame = CFrame.new(teleportPosition) * lookRotation
             end
@@ -151,21 +151,21 @@ local function onToggleKeyPressed()
     toggleEnabled = not toggleEnabled
     updateLookDirection()
 end
- 
+
 -- Function to handle character added event
 local function onCharacterAdded(newCharacter)
     character = newCharacter
     updateLookDirection()
 end
- 
+
 -- Call the function initially
 if player.Character then
     onCharacterAdded(player.Character)
 end
- 
+
 -- Connect the function to the CharacterAdded event
 player.CharacterAdded:Connect(onCharacterAdded)
- 
+
 -- Connect the toggle function to the toggle key press event
 game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
     if not isProcessed then
@@ -174,18 +174,18 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, isProcess
         end
     end
 end)
- 
+
 -- Connect the function to the RunService's Heartbeat event to update every frame
 local runService = game:GetService("RunService")
 runService.Heartbeat:Connect(updateLookDirection)
- 
+
 -- Track the modify tool state
 local modifyToolEnabled = false
- 
+
 -- Function to handle modify tool key press
 local function onModifyToolKeyPressed()
     modifyToolEnabled = not modifyToolEnabled
- 
+
     -- Check if the Local Player is holding a tool
     local tool = player.Character:FindFirstChildOfClass("Tool")
     if tool then
@@ -207,9 +207,9 @@ local function onModifyToolKeyPressed()
         end
     end
 end
- 
+
 local printTargetPartsEnabled = false
- 
+
 local function togglePrintTargetParts()
     printTargetPartsEnabled = not printTargetPartsEnabled
     if printTargetPartsEnabled then
@@ -218,7 +218,7 @@ local function togglePrintTargetParts()
         print("Target Character Model Parts: OFF")
     end
 end
- 
+
 game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
     if not isProcessed then
         if input.KeyCode == getgenv().KillAuraKey then -- Use any key you like here
@@ -226,7 +226,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, isProcess
         end
     end
 end)
- 
+
 -- Function to print target parts
 local function onPrintTargetParts()
     if character and toggleEnabled then
@@ -241,7 +241,7 @@ local function onPrintTargetParts()
                 end
             end
         end
- 
+
         -- Find the closest character model with a living Humanoid
         local closestCharacterModel = nil
         local closestDistance = math.huge
@@ -255,23 +255,22 @@ local function onPrintTargetParts()
                 end
             end
         end
- 
+
         -- Print the parts of the closest character model (only if they are of class "Part")
-       if closestCharacterModel then
+        if closestCharacterModel then
             print("Target Character Model Parts:")
             local function printModelPartsWithParents(model)
                 for _, part in ipairs(model:GetDescendants()) do
                     if part:IsA("BasePart") then
                         local parent = part.Parent
                         if parent:IsA("Model") and parent.Name ~= player.Name then
-                            firetouchinterest(character:FindFirstChildOfClass("Tool"):FindFirstChild("Handle"),part,1)
-                            firetouchinterest(character:FindFirstChildOfClass("Tool"):FindFirstChild("Handle"),part,0)
+                            firetouchinterest(character:FindFirstChildOfClass("Tool"):FindFirstChild("Handle"), part, 1)
+                            firetouchinterest(character:FindFirstChildOfClass("Tool"):FindFirstChild("Handle"), part, 0)
                         end
                     end
                 end
             end
- 
- 
+
             local success, err = pcall(printModelPartsWithParents, closestCharacterModel)
             if not success then
                 warn("Error occurred while printing target parts:", err)
@@ -279,13 +278,13 @@ local function onPrintTargetParts()
         end
     end
 end
- 
+
 runService.Heartbeat:Connect(function()
     if printTargetPartsEnabled then
         onPrintTargetParts()
     end
 end)
- 
+
 -- Connect the modify tool function to the modify tool key press event
 game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
     if not isProcessed then
@@ -294,11 +293,11 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, isProcess
         end
     end
 end)
- 
+
 local function onAutoWalkKeyPressed()
     getgenv().autoWalkEnabled = not getgenv().autoWalkEnabled
 end
- 
+
 -- Connect the auto walk function to the auto walk key press event
 game:GetService("UserInputService").InputBegan:Connect(function(input, isProcessed)
     if not isProcessed then
@@ -307,14 +306,14 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, isProcess
         end
     end
 end)
- 
+
 local function autoWalkToTarget()
     if character and toggleEnabled and getgenv().autoWalkEnabled then
         -- Get the closest part with a living Humanoid
         local closestPart = nil
         local closestDistance = math.huge
         local playerPosition = character.HumanoidRootPart.Position
- 
+
         for _, otherPlayer in ipairs(game.Players:GetPlayers()) do
             if otherPlayer ~= player and otherPlayer.Character then
                 for _, partName in ipairs(targetParts) do
@@ -332,11 +331,11 @@ local function autoWalkToTarget()
                 end
             end
         end
- 
+
         -- Update the player's position to move towards the target if the player is looking at it
         if closestPart then
             local targetPosition = closestPart.Position
- 
+
             -- Move the player's humanoid to the targeted part's position
             character.Humanoid:MoveTo(targetPosition)
         else
@@ -345,368 +344,380 @@ local function autoWalkToTarget()
         end
     end
 end
- 
- 
+
 runService.Heartbeat:Connect(autoWalkToTarget)
- 
+
 local id = game.PlaceId -- Game id
 local lp = game:GetService("Players").LocalPlayer -- gets client side player / local player
 local lpName = lp.Name
 getrenv().GruopChecked = nil
 local groupId = 4474223
- 
+
 local function checkGroupMembership()
     local success, result = pcall(function()
         return lp:IsInGroup(groupId)
     end)
- 
+
     if success then
         if result then
-        local rank = lp:GetRankInGroup(groupId)
-        print("hey "..lpName.." we dedected that ur in gruop! ty")
-            else
+            local rank = lp:GetRankInGroup(groupId)
+            print("hey " .. lpName .. " we dedected that ur in gruop! ty")
+        else
             print("Ur not in the gruop!")
-            end
-            else
-            warn("Failed to check group membership:", result)
+        end
+    else
+        warn("Failed to check group membership:", result)
     end
 end
- 
+
 checkGroupMembership()
- 
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))() -- Gui source (orion gui)
-local Window = OrionLib:MakeWindow({IntroText = "Hi",Name = "c1ps Hub", HidePremium = false, SaveConfig = false, ConfigFolder = "c1ps Hub Config id: "..id}) -- Configs
+
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))() -- Gui source (orion gui)
+local Window = OrionLib:MakeWindow({
+    IntroText = "Hi",
+    Name = "c1ps Hub",
+    HidePremium = false,
+    SaveConfig = false,
+    ConfigFolder = "c1ps Hub Config id: " .. id,
+}) -- Configs
 local Zort = game:GetService("Players").LocalPlayer
- 
+
 getgenv().AntiAfk = false
 getgenv().plrName = Zort.DisplayName
 getgenv().ClanTag = false
 getgenv().randomizeTeleport = false
-getgenv().Wiggle = false 
- 
+getgenv().Wiggle = false
+
 function AntiAfk()
     while getgenv().AntiAfk == true do
-    Players = game:GetService("Players")
-	local GC = getconnections or get_signal_cons
-	if GC then
-		for i,v in pairs(GC(Players.LocalPlayer.Idled)) do
-			if v["Disable"] then
-				v["Disable"](v)
-			elseif v["Disconnect"] then
-				v["Disconnect"](v)
-			end
-		end
-	else
-		Players.LocalPlayer.Idled:Connect(function()
-			local VirtualUser = game:GetService("VirtualUser")
-			VirtualUser:CaptureController()
-			VirtualUser:ClickButton2(Vector2.new())
-		end)
-	end
-wait(10)
+        Players = game:GetService("Players")
+        local GC = getconnections or get_signal_cons
+        if GC then
+            for i, v in pairs(GC(Players.LocalPlayer.Idled)) do
+                if v["Disable"] then
+                    v["Disable"](v)
+                elseif v["Disconnect"] then
+                    v["Disconnect"](v)
+                end
+            end
+        else
+            Players.LocalPlayer.Idled:Connect(function()
+                local VirtualUser = game:GetService("VirtualUser")
+                VirtualUser:CaptureController()
+                VirtualUser:ClickButton2(Vector2.new())
+            end)
+        end
+        wait(10)
+    end
 end
-end
- 
+
 game:GetService("RunService").RenderStepped:Connect(function()
     pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.MoveDirection.Magnitude > 0 then
-            game.Players.LocalPlayer.Character:TranslateBy(game.Players.LocalPlayer.Character.Humanoid.MoveDirection * TargetWalkspeed/50)
+            game.Players.LocalPlayer.Character:TranslateBy(
+                game.Players.LocalPlayer.Character.Humanoid.MoveDirection * TargetWalkspeed / 50
+            )
         end
     end)
 end)
 --function auto
- 
- 
+
 local UserInputService = game:GetService("UserInputService")
- 
+
 local function checkJump()
     local character = game.Players.LocalPlayer.Character
     local humanoid = character:FindFirstChildOfClass("Humanoid")
- 
+
     if getgenv().InfJump == true and humanoid and humanoid:GetState() ~= Enum.HumanoidStateType.Jumping then
         humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
     end
 end
- 
+
 function InfJump()
     while getgenv().InfJump == true do
-print("Cips Hub: enabled inf jump")
-wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+        print("Cips Hub: enabled inf jump")
+        wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+    end
 end
-end
- 
+
 function Wiggle()
     while getgenv().Wiggle == true do
-print("Cips Hub: enabled Wiggle")
-wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+        print("Cips Hub: enabled Wiggle")
+        wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+    end
 end
-end
- 
+
 function randomizeTeleport()
     while getgenv().randomizeTeleport == true do
-print("Cips Hub:  enabled Bang Teleport")
-wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+        print("Cips Hub:  enabled Bang Teleport")
+        wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+    end
 end
-end
- 
+
 function autoActivateToolEnabled()
     while getgenv().autoActivateToolEnabled == true do
-print("Cips Hub: enabled autoActivateTool")
-wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+        print("Cips Hub: enabled autoActivateTool")
+        wait(999999999999999999999999999999999999999999999999999999999999999999999999999)
+    end
 end
-end
- 
+
 UserInputService.JumpRequest:Connect(checkJump)
- 
+
 --menü
- 
+
 local SWTab = Window:MakeTab({
-	Name = "Sword Fight",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Sword Fight",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false,
 })
- 
+
 local PlayerTab = Window:MakeTab({
-	Name = "Misc",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Misc",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false,
 })
- 
+
 local CrTab = Window:MakeTab({
-	Name = "Credits",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Credits",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false,
 })
- 
+
 local LocalizationS = game:GetService("LocalizationService")
- 
+
 local result, code = pcall(function()
-	return LocalizationS:GetCountryRegionForPlayerAsync(player)
+    return LocalizationS:GetCountryRegionForPlayerAsync(player)
 end)
- 
-CrTab:AddParagraph("Ur connection from:",code)
-CrTab:AddParagraph("Script developers:","c1ps, urlevii")
-CrTab:AddParagraph("Our discord server:","c1ps Hub")
- 
+
+CrTab:AddParagraph("Ur connection from:", code)
+CrTab:AddParagraph("Script developers:", "c1ps, urlevii")
+CrTab:AddParagraph("Our discord server:", "c1ps Hub")
+
 CrTab:AddButton({
-	Name = "Join Discord For Updates and Community!",
-	Callback = function()
+    Name = "Join Discord For Updates and Community!",
+    Callback = function()
         setclipboard("https://discord.gg/Qvf4KMrj5H")
-  	end    
+    end,
 })
- 
+
 CrTab:AddButton({
-	Name = "Clan Tag",
-	Callback = function()
-Zort.DisplayName = "$c1ps$ "..getgenv().plrName
-  	end    
+    Name = "Clan Tag",
+    Callback = function()
+        Zort.DisplayName = "$c1ps$ " .. getgenv().plrName
+    end,
 })
- 
+
 PlayerTab:AddToggle({
-	Name = "Inf Jump",
-	Default = false,
-	Callback = function(Value)
-		getgenv().InfJump = Value 
-InfJump() 
-    end
+    Name = "Inf Jump",
+    Default = false,
+    Callback = function(Value)
+        getgenv().InfJump = Value
+        InfJump()
+    end,
 })
- 
+
 SWTab:AddToggle({
-	Name = "Auto Wiggle",
-	Default = false,
-	Callback = function(Value)
-		getgenv().Wiggle = Value 
-		Wiggle() 
-    end
+    Name = "Auto Wiggle",
+    Default = false,
+    Callback = function(Value)
+        getgenv().Wiggle = Value
+        Wiggle()
+    end,
 })
- 
+
 SWTab:AddToggle({
-	Name = "Auto Swing",
-	Default = false,
-	Callback = function(Value)
-		getgenv().autoActivateToolEnabled = Value 
-		autoActivateToolEnabled() 
-    end
+    Name = "Auto Swing",
+    Default = false,
+    Callback = function(Value)
+        getgenv().autoActivateToolEnabled = Value
+        autoActivateToolEnabled()
+    end,
 })
- 
+
 SWTab:AddToggle({
-	Name = "Bang Teleport",
-	Default = false,
-	Callback = function(Value)
-		getgenv().randomizeTeleport = Value 
-		randomizeTeleport() 
-    end
+    Name = "Bang Teleport",
+    Default = false,
+    Callback = function(Value)
+        getgenv().randomizeTeleport = Value
+        randomizeTeleport()
+    end,
 })
- 
+
 PlayerTab:AddToggle({
-	Name = "Anti Afk",
-	Default = false,
-	Callback = function(Value)
-		getgenv().AntiAfk = Value 
-AntiAfk() 
-    end
+    Name = "Anti Afk",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AntiAfk = Value
+        AntiAfk()
+    end,
 })
- 
+
 PlayerTab:AddSlider({
-	Name = "Speed",
-	Min = 0,
-	Max = 200,
-	Default = 0,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.1,
-	Callback = function(Value)
-		TargetWalkspeed = Value
-	end    
+    Name = "Speed",
+    Min = 0,
+    Max = 200,
+    Default = 0,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 0.1,
+    Callback = function(Value)
+        TargetWalkspeed = Value
+    end,
 })
- 
+
 SWTab:AddDropdown({
-	Name = "Select Wiggle Mode",
-	Default = "Right",
-	Options = {"Left", "Right", "Both"},
-	Callback = function(Value)
-		getgenv().WiggleMode = Value
-	end    
+    Name = "Select Wiggle Mode",
+    Default = "Right",
+    Options = { "Left", "Right", "Both" },
+    Callback = function(Value)
+        getgenv().WiggleMode = Value
+    end,
 })
- 
+
 SWTab:AddTextbox({
-	Name = "Aimbot",
-	Default = "R",
-	TextDisappear = false,
-	Callback = function(Value)
-		getgenv().ToggleKey1 = Enum.KeyCode[Value]
-	end	  
+    Name = "Aimbot",
+    Default = "R",
+    TextDisappear = false,
+    Callback = function(Value)
+        getgenv().ToggleKey1 = Enum.KeyCode[Value]
+    end,
 })
- 
+
 SWTab:AddTextbox({
-	Name = "Kill Aura",
-	Default = "P",
-	TextDisappear = false,
-	Callback = function(Value)
-		getgenv().KillAuraKey = Enum.KeyCode[Value]
-	end	  
+    Name = "Kill Aura",
+    Default = "P",
+    TextDisappear = false,
+    Callback = function(Value)
+        getgenv().KillAuraKey = Enum.KeyCode[Value]
+    end,
 })
- 
+
 SWTab:AddTextbox({
-	Name = "Auto Walk To Target",
-	Default = "K",
-	TextDisappear = false,
-	Callback = function(Value)
-		getgenv().Autowalkkey1 = Enum.KeyCode[Value]
-	end	  
+    Name = "Auto Walk To Target",
+    Default = "K",
+    TextDisappear = false,
+    Callback = function(Value)
+        getgenv().Autowalkkey1 = Enum.KeyCode[Value]
+    end,
 })
- 
+
 SWTab:AddTextbox({
-	Name = "Teleport Strafe",
-	Default = "T",
-	TextDisappear = false,
-	Callback = function(Value)
-		getgenv().teleportKey = Enum.KeyCode[Value]
-	end	  
+    Name = "Teleport Strafe",
+    Default = "T",
+    TextDisappear = false,
+    Callback = function(Value)
+        getgenv().teleportKey = Enum.KeyCode[Value]
+    end,
 })
- 
+
 SWTab:AddTextbox({
-	Name = "Reach",
-	Default = "F",
-	TextDisappear = false,
-	Callback = function(Value)
-		getgenv().modifyToolKey = Enum.KeyCode[Value]
-	end	  
+    Name = "Reach",
+    Default = "F",
+    TextDisappear = false,
+    Callback = function(Value)
+        getgenv().modifyToolKey = Enum.KeyCode[Value]
+    end,
 })
- 
+
 SWTab:AddSlider({
-	Name = "Aimbot Distance",
-	Min = 0,
-	Max = 500,
-	Default = 20,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.1,
-	Callback = function(Value)
-		getgenv().maxRange = Value
-	end    
+    Name = "Aimbot Distance",
+    Min = 0,
+    Max = 500,
+    Default = 20,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 0.1,
+    Callback = function(Value)
+        getgenv().maxRange = Value
+    end,
 })
- 
+
 SWTab:AddSlider({
-	Name = "Reach SizeX",
-	Min = 0,
-	Max = 50,
-	Default = 30,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.1,
-	Callback = function(Value)
-		getgenv().ReachSizeX = Value
-	end    
+    Name = "Reach SizeX",
+    Min = 0,
+    Max = 50,
+    Default = 30,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 0.1,
+    Callback = function(Value)
+        getgenv().ReachSizeX = Value
+    end,
 })
- 
+
 SWTab:AddSlider({
-	Name = "Reach SizeY",
-	Min = 0,
-	Max = 50,
-	Default = 30,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.1,
-	Callback = function(Value)
-		getgenv().ReachSizeY = Value
-	end    
+    Name = "Reach SizeY",
+    Min = 0,
+    Max = 50,
+    Default = 30,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 0.1,
+    Callback = function(Value)
+        getgenv().ReachSizeY = Value
+    end,
 })
- 
+
 SWTab:AddSlider({
-	Name = "Reach SizeZ",
-	Min = 0,
-	Max = 50,
-	Default = 30,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.1,
-	Callback = function(Value)
-		getgenv().ReachSizeZ = Value
-	end    
+    Name = "Reach SizeZ",
+    Min = 0,
+    Max = 50,
+    Default = 30,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 0.1,
+    Callback = function(Value)
+        getgenv().ReachSizeZ = Value
+    end,
 })
- 
+
 SWTab:AddDropdown({
-	Name = "Select Reach Type",
-	Default = "Enum.PartType.Ball",
-	Options = {"Enum.PartType.Ball", "Enum.PartType.Block", "Enum.PartType.CornerWedge", "Enum.PartType.Cylinder", "Enum.PartType.Wedge"},
-	Callback = function(Value)
-		getgenv().ReachType = Value
-	end    
+    Name = "Select Reach Type",
+    Default = "Enum.PartType.Ball",
+    Options = {
+        "Enum.PartType.Ball",
+        "Enum.PartType.Block",
+        "Enum.PartType.CornerWedge",
+        "Enum.PartType.Cylinder",
+        "Enum.PartType.Wedge",
+    },
+    Callback = function(Value)
+        getgenv().ReachType = Value
+    end,
 })
- 
+
 SWTab:AddSlider({
-	Name = "Teleport Distance",
-	Min = 0,
-	Max = 20,
-	Default = 4,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	Callback = function(Value)
-		getgenv().TPDistance = Value
-	end    
+    Name = "Teleport Distance",
+    Min = 0,
+    Max = 20,
+    Default = 4,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    Callback = function(Value)
+        getgenv().TPDistance = Value
+    end,
 })
- 
+
 SWTab:AddDropdown({
-	Name = "Target Box Color",
-	Default = "Bright red",
-	Options = {"Bright red", "Red", "Black", "Blue", "Cyan", "Pink", "White"},
-	Callback = function(Value)
-    game:GetService("Workspace").Highlight.BrickColor = BrickColor.new(Value)
-	end    
+    Name = "Target Box Color",
+    Default = "Bright red",
+    Options = { "Bright red", "Red", "Black", "Blue", "Cyan", "Pink", "White" },
+    Callback = function(Value)
+        game:GetService("Workspace").Highlight.BrickColor = BrickColor.new(Value)
+    end,
 })
- 
+
 SWTab:AddSlider({
-	Name = "Box Transparency",
-	Min = 0,
-	Max = 1,
-	Default = 0.3,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.05,
-	ValueName = ":)",
-	Callback = function(Value)
-    game:GetService("Workspace").Highlight.Transparency = Value
-	end    
+    Name = "Box Transparency",
+    Min = 0,
+    Max = 1,
+    Default = 0.3,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 0.05,
+    ValueName = ":)",
+    Callback = function(Value)
+        game:GetService("Workspace").Highlight.Transparency = Value
+    end,
 })
- 
+
 OrionLib:Init()
- 
+
 task.wait(2)
- 
-print("c1ps Hub Loaded Config id: "..id)
-print("Hi "..lpName.." Welcome to c1ps Hub Beta")
+
+print("c1ps Hub Loaded Config id: " .. id)
+print("Hi " .. lpName .. " Welcome to c1ps Hub Beta")

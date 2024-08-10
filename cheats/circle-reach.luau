@@ -2,7 +2,7 @@
 -- alt source, not recommended (adware)
 -- updated at december 12, 2023
 
-local circleSize = 20 
+local circleSize = 20
 local showCircle = true
 
 local function isInsideCircle(position)
@@ -32,7 +32,11 @@ local function getClosestPlayerInCircle()
             local position = player.Character.HumanoidRootPart.Position
             local distance = (position - localPosition).Magnitude
 
-            if isInsideCircle(position) and distance < closestDistance and player.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
+            if
+                isInsideCircle(position)
+                and distance < closestDistance
+                and player.Character:FindFirstChildOfClass("Humanoid").Health > 0
+            then
                 closestPlayer = player
                 closestDistance = distance
             end
@@ -60,7 +64,7 @@ local function displayCoolNotification(player)
     corner.Parent = frame
 
     local textLabel = Instance.new("TextLabel")
-    textLabel.Text = player.Name.." is dead."
+    textLabel.Text = player.Name .. " is dead."
     textLabel.Size = UDim2.new(1, 0, 1, 0)
     textLabel.Font = Enum.Font.SourceSansBold
     textLabel.TextScaled = true
@@ -92,7 +96,7 @@ while true do
         displayCoolNotification(closestPlayer)
     end
 
-    for _, v in pairs(game:GetService('Players').LocalPlayer.Character:GetChildren()) do
+    for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren()) do
         if v:IsA("Tool") then
             for _, child in pairs(v.Handle:GetChildren()) do
                 if child:IsA("SelectionSphere") then

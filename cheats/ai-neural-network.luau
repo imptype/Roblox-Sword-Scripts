@@ -23,8 +23,8 @@ local savedMovements = {}
 local recentKillerMovements = {}
 
 -- Define state-action space size
-local stateSize = 3  -- Example: (position, orientation, health)
-local actionSize = 12  -- Number of actions
+local stateSize = 3 -- Example: (position, orientation, health)
+local actionSize = 12 -- Number of actions
 
 -- Function to get Q-value for a given state-action pair
 local function getQValue(state, action)
@@ -121,7 +121,9 @@ end
 -- Function to evaluate the AI's performance
 local function evaluateMovement(character, lastDistance, targetPosition)
     local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-    if not humanoidRootPart then return lastDistance, 0 end
+    if not humanoidRootPart then
+        return lastDistance, 0
+    end
 
     local currentPosition = humanoidRootPart.Position
     local currentDistance = (currentPosition - targetPosition).magnitude
@@ -167,7 +169,9 @@ end
 -- Function to move randomly and learn
 local function moveRandomly(character)
     local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not humanoid then return end
+    if not humanoid then
+        return
+    end
 
     local action = chooseAction(character.HumanoidRootPart.Position)
     local movementVector = Vector3.new(0, 0, 0)
@@ -216,7 +220,8 @@ local function moveRandomly(character)
             bodyGyro.MaxTorque = Vector3.new(4000, 4000, 4000)
             bodyGyro.P = 3000
         end
-        bodyGyro.CFrame = character.HumanoidRootPart.CFrame * CFrame.Angles(rotationVector.X, rotationVector.Y, rotationVector.Z)
+        bodyGyro.CFrame = character.HumanoidRootPart.CFrame
+            * CFrame.Angles(rotationVector.X, rotationVector.Y, rotationVector.Z)
     end
 
     return action
@@ -224,7 +229,7 @@ end
 
 -- Function to store experience in memory with prioritized replay
 local function storeExperience(state, action, reward, nextState)
-    table.insert(experienceMemory, {state = state, action = action, reward = reward, nextState = nextState})
+    table.insert(experienceMemory, { state = state, action = action, reward = reward, nextState = nextState })
     if #experienceMemory > maxMemorySize then
         table.remove(experienceMemory, 1) -- Remove oldest experience if memory exceeds size
     end
@@ -258,20 +263,32 @@ end
 -- Function to handle AI behavior
 local function handleAIBehavior()
     local character = game.Players.LocalPlayer.Character
-    if not character then return end
+    if not character then
+        return
+    end
 
     local targetPlayer = findClosestPlayer()
-    if not targetPlayer or not targetPlayer.Character then return end
+    if not targetPlayer or not targetPlayer.Character then
+        return
+    end
     local targetHumanoidRootPart = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if not targetHumanoidRootPart then return end
+    if not targetHumanoidRootPart then
+        return
+    end
     local targetPosition = targetHumanoidRootPart.Position
     local lastDistance = (character.HumanoidRootPart.Position - targetPosition).magnitude
 
     local lastPrintTime = tick()
     while true do
-        if not character or not character:FindFirstChild("Humanoid") or not character:FindFirstChild("HumanoidRootPart") then break end
+        if
+            not character
+            or not character:FindFirstChild("Humanoid")
+            or not character:FindFirstChild("HumanoidRootPart")
+        then
+            break
+        end
         local action = moveRandomly(character)
-        table.insert(savedMovements, {action = action, position = character.HumanoidRootPart.Position})
+        table.insert(savedMovements, { action = action, position = character.HumanoidRootPart.Position })
         wait(0.1) -- Move every 0.1 seconds
         local newDistance, reward = evaluateMovement(character, lastDistance, targetPosition)
 
@@ -295,14 +312,18 @@ end
 -- Monitor character respawn
 local function onCharacterAdded(character)
     -- Wait until the character is fully loaded
-    repeat wait() until character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart")
+    repeat
+        wait()
+    until character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart")
     handleAIBehavior()
 end
 
 -- Function to track movements and orientations of the player who kills the AI
 local function trackKillerMovements(player)
     local character = player.Character
-    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+    if not character or not character:FindFirstChild("HumanoidRootPart") then
+        return
+    end
 
     recentKillerMovements = {} -- Clear previous movements
     local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
@@ -314,7 +335,7 @@ local function trackKillerMovements(player)
         table.insert(recentKillerMovements, {
             CFrame = humanoidRootPart.CFrame,
             Position = humanoidRootPart.Position,
-            Orientation = humanoidRootPart.Orientation
+            Orientation = humanoidRootPart.Orientation,
         })
         wait(0.1) -- Track every 0.1 seconds
     end
@@ -354,7 +375,9 @@ end)
 
 -- Handle key presses for saving/loading Q-values
 game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
-    if gameProcessedEvent then return end
+    if gameProcessedEvent then
+        return
+    end
     if input.KeyCode == Enum.KeyCode.X then
         saveQValues() -- Save Q-values when X is pressed
     elseif input.KeyCode == Enum.KeyCode.V then

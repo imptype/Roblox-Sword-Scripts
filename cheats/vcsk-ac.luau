@@ -18,7 +18,9 @@ getgenv().autoClicking = false
 getgenv().clickWait = 1
 
 --// Exploit Fix \\--
-if not pcall(function() return syn.protect_gui end) then
+if not pcall(function()
+    return syn.protect_gui
+end) then
     syn = {}
     syn.protect_gui = function(A_1)
         A_1.Parent = CoreGui
@@ -26,7 +28,8 @@ if not pcall(function() return syn.protect_gui end) then
 end
 
 --// UI Library \\--
-local CoastingLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/UI-Library/main/Source/Coasting.lua"))()
+local CoastingLibrary =
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/UI-Library/main/Source/Coasting.lua"))()
 
 local autoClickerTab = CoastingLibrary:CreateTab("Auto Clicker")
 local mainSection = autoClickerTab:CreateSection("Main")
@@ -41,6 +44,6 @@ mainSection:CreateToggle("Status:", function(s)
     end
 end)
 
-settingsSection:CreateSlider("Click wait", 0,100000,1, function(v)
+settingsSection:CreateSlider("Click wait", 0, 100000, 1, function(v)
     getgenv().clickWait = v
 end)

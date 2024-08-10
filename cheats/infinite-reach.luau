@@ -15,62 +15,64 @@ function Loop()
         local player = game.Players.LocalPlayer
 
         local folder = workspace:FindFirstChild(player.Name)
-            if not folder then
-                wait(1)
-                Loop()
-                break
-            end
+        if not folder then
+            wait(1)
+            continue -- Skip to the next iteration of the loop
+        end
 
         local tool = folder:FindFirstChildOfClass("Tool")
-            if not tool then
-                wait(1)
-                Loop()
-                break
-            end
+        if not tool then
+            wait(1)
+            continue -- Skip to the next iteration of the loop
+        end
 
-            local handle = tool:FindFirstChild("Handle")
-            if not handle then
-                wait(1)
-                Loop()
-                break
-            end
+        local handle = tool:FindFirstChild("Handle")
+        if not handle then
+            wait(1)
+            continue -- Skip to the next iteration of the loop
+        end
 
         local function getDistance(point1, point2)
             return (point1 - point2).magnitude
         end
 
         local function hit(parts)
-                local touchInterest = handle:FindFirstChildOfClass("TouchTransmitter")
-                if touchInterest then
-                    for _, part in ipairs(parts) do
-                        firetouchinterest(handle, part, 0)
-                        firetouchinterest(handle, part, 1)
-                    end
+            local touchInterest = handle:FindFirstChildOfClass("TouchTransmitter")
+            if touchInterest then
+                for _, part in ipairs(parts) do
+                    firetouchinterest(handle, part, 0)
+                    firetouchinterest(handle, part, 1)
                 end
             end
         end
 
-        Character = game.Players.LocalPlayer.Character  
-        Health = Character.Humanoid.Health  
+        local Character = game.Players.LocalPlayer.Character
+        local Health = Character.Humanoid.Health
         wait()
         if Health ~= 0 then
             local folder = workspace:FindFirstChild(player.Name)
             if not folder then
                 wait(1)
-                Loop()
-                break
+                continue -- Skip to the next iteration of the loop
             end
 
             local tool = folder:FindFirstChildOfClass("Tool")
-            if not tool then    
+            if not tool then
                 wait(1)
-                Loop()
-                break
+                continue -- Skip to the next iteration of the loop
             end
+
             if tool.Parent == folder then
                 for _, targetPlayer in pairs(game.Players:GetPlayers()) do
-                    if targetPlayer ~= player and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local distance = getDistance(player.Character.HumanoidRootPart.Position, targetPlayer.Character.HumanoidRootPart.Position)
+                    if
+                        targetPlayer ~= player
+                        and targetPlayer.Character
+                        and targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    then
+                        local distance = getDistance(
+                            player.Character.HumanoidRootPart.Position,
+                            targetPlayer.Character.HumanoidRootPart.Position
+                        )
                         if distance <= reach and not Whitelist[targetPlayer.Name] then
                             local hits = {}
                             local character = targetPlayer.Character
@@ -88,8 +90,9 @@ function Loop()
                     end
                 end
             end
-            wait()
         end
+
+        wait()
     end
 end
 

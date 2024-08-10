@@ -20,71 +20,63 @@ local player = game:GetService("Players").LocalPlayer
 --// Script \\--
 
 game:GetService("RunService").RenderStepped:Connect(function()
+    local p = game.Players:GetPlayers()
 
-local p = game.Players:GetPlayers()
+    for i = 2, #p do
+        local v = p[i].Character
 
-for i = 2, #p do local v = p[i].Character
+        if
+            v
+            and v:FindFirstChild("Humanoid")
+            and v.Humanoid.Health > 0
+            and v:FindFirstChild("HumanoidRootPart")
+            and player:DistanceFromCharacter(v.HumanoidRootPart.Position) <= range
+        then
+            local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
 
-if v and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") and player:DistanceFromCharacter(v.HumanoidRootPart.Position) <= range then
+            if tool and tool:FindFirstChild("Handle") then
+                tool:Activate()
 
-local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+                for i, v in next, v:GetChildren() do
+                    if v:IsA("BasePart") then
+                        firetouchinterest(tool.Handle, v, 0)
 
-if tool and tool:FindFirstChild("Handle") then
-
-tool:Activate()
-
-for i,v in next, v:GetChildren() do
-
-if v:IsA("BasePart") then
-
-firetouchinterest(tool.Handle,v,0)
-
-firetouchinterest(tool.Handle,v,1)
-
-end
-
-end
-
-end
-
-end
-
-end
-
+                        firetouchinterest(tool.Handle, v, 1)
+                    end
+                end
+            end
+        end
+    end
 end)
 
 game:GetService("Players").LocalPlayer:GetMouse().KeyDown:Connect(function(Key)
+    if Key == "q" then
+        range = range + 1
 
-if Key == "q" then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
 
-range = range + 1
+            Title = "ok we going up!!!",
 
-game:GetService("StarterGui"):SetCore("SendNotification", {
+            Text = "reach went up by " .. range,
 
-Title = "ok we going up!!!";
+            Icon = "",
 
-Text = "reach went up by " .. range;
+            Duration = 0.5,
+        })
+    end
 
-Icon = "";
+    if Key == "e" then
+        range = range - 1
 
-Duration = 0.5;})
+        game:GetService("StarterGui"):SetCore("SendNotification", {
 
-end
+            Title = "reach is going down ;(",
 
-if Key == "e" then
+            Text = "reach went down by " .. range,
 
-range = range - 1
+            Icon = "",
 
-game:GetService("StarterGui"):SetCore("SendNotification", {
-
-Title = "reach is going down ;(";
-
-Text = "reach went down by " .. range;
-
-Icon = "";
-
-Duration = 0.5;})
-
-end
-
+            Duration = 0.5,
+        })
+    end
 end)
